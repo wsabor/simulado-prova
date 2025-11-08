@@ -1,0 +1,77 @@
+/* 
+  GUIA DE CLASSES PARA DARK MODE
+  
+  Ao invés de usar cores hardcoded do Tailwind (bg-gray-50, text-gray-900),
+  use estas classes que respeitam o dark mode automaticamente:
+  
+  BACKGROUNDS:
+  - bg-gray-50 → bg-page ou bg-secondary
+  - bg-white → bg-card
+  
+  TEXTOS:
+  - text-gray-900 → text-primary-custom
+  - text-gray-600 → text-secondary-custom  
+  - text-gray-500 → text-muted-custom
+  
+  BORDERS:
+  - border-gray-200 → border-card
+  - border-gray-300 → border-custom
+  
+  CARDS:
+  Use: card-custom (já inclui background e border)
+*/
+
+/* Classes Tailwind Override para Dark Mode */
+@layer utilities {
+  /* Páginas e Containers */
+  .bg-page {
+    background-color: var(--background) !important;
+  }
+  
+  .bg-secondary {
+    background-color: var(--background-secondary) !important;
+  }
+  
+  .bg-card {
+    background-color: var(--card-background) !important;
+  }
+  
+  /* Headers e Navigation */
+  .header-custom {
+    background-color: var(--card-background) !important;
+    border-color: var(--border) !important;
+  }
+  
+  /* Textos */
+  .text-primary {
+    color: var(--foreground) !important;
+  }
+  
+  .text-secondary {
+    color: var(--foreground-secondary) !important;
+  }
+  
+  .text-muted {
+    color: var(--foreground-muted) !important;
+  }
+  
+  /* Borders */
+  .border-custom {
+    border-color: var(--border) !important;
+  }
+  
+  .border-card {
+    border-color: var(--card-border) !important;
+  }
+  
+  /* Cards completos */
+  .card {
+    background-color: var(--card-background) !important;
+    border: 1px solid var(--card-border) !important;
+  }
+  
+  /* Hover states */
+  .hover-card:hover {
+    background-color: var(--background-secondary) !important;
+  }
+}

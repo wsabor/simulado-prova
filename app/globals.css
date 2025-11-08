@@ -1,8 +1,126 @@
 @import "tailwindcss";
 
 :root {
+  /* Backgrounds */
   --background: #ffffff;
-  --foreground: #171717;
+  --background-secondary: #f9fafb;
+  
+  /* Foreground (textos) */
+  --foreground: #111827;
+  --foreground-secondary: #6b7280;
+  --foreground-muted: #9ca3af;
+  
+  /* Inputs */
+  --input-background: #ffffff;
+  --input-text: #000000;
+  --input-border: #d1d5db;
+  --input-border-focus: #3b82f6;
+  --input-placeholder: #9ca3af;
+  
+  /* Cards e Containers */
+  --card-background: #ffffff;
+  --card-border: #e5e7eb;
+  
+  /* Borders */
+  --border: #e5e7eb;
+  --border-secondary: #d1d5db;
+  
+  /* Primary (azul) */
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --primary-light: #eff6ff;
+  --primary-text: #1e40af;
+  
+  /* Success (verde) */
+  --success: #10b981;
+  --success-hover: #059669;
+  --success-light: #d1fae5;
+  --success-text: #065f46;
+  
+  /* Warning (amarelo) */
+  --warning: #f59e0b;
+  --warning-hover: #d97706;
+  --warning-light: #fef3c7;
+  --warning-text: #92400e;
+  
+  /* Error (vermelho) */
+  --error: #ef4444;
+  --error-hover: #dc2626;
+  --error-light: #fee2e2;
+  --error-text: #991b1b;
+  
+  /* Gray scale */
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+}
+
+/* Aplicar dark mode quando a classe .dark estiver no html */
+.dark {
+  /* Backgrounds */
+  --background: #0f172a;
+  --background-secondary: #1e293b;
+  
+  /* Foreground (textos) */
+  --foreground: #f1f5f9;
+  --foreground-secondary: #cbd5e1;
+  --foreground-muted: #94a3b8;
+  
+  /* Inputs */
+  --input-background: #1e293b;
+  --input-text: #f1f5f9;
+  --input-border: #475569;
+  --input-border-focus: #60a5fa;
+  --input-placeholder: #64748b;
+  
+  /* Cards e Containers */
+  --card-background: #1e293b;
+  --card-border: #334155;
+  
+  /* Borders */
+  --border: #334155;
+  --border-secondary: #475569;
+  
+  /* Primary (azul) */
+  --primary: #60a5fa;
+  --primary-hover: #3b82f6;
+  --primary-light: #1e3a8a;
+  --primary-text: #93c5fd;
+  
+  /* Success (verde) */
+  --success: #34d399;
+  --success-hover: #10b981;
+  --success-light: #064e3b;
+  --success-text: #6ee7b7;
+  
+  /* Warning (amarelo) */
+  --warning: #fbbf24;
+  --warning-hover: #f59e0b;
+  --warning-light: #78350f;
+  --warning-text: #fcd34d;
+  
+  /* Error (vermelho) */
+  --error: #f87171;
+  --error-hover: #ef4444;
+  --error-light: #7f1d1d;
+  --error-text: #fca5a5;
+  
+  /* Gray scale para dark mode */
+  --gray-50: #1e293b;
+  --gray-100: #334155;
+  --gray-200: #475569;
+  --gray-300: #64748b;
+  --gray-500: #94a3b8;
+  --gray-600: #cbd5e1;
+  --gray-700: #e2e8f0;
+  --gray-800: #f1f5f9;
+  --gray-900: #f8fafc;
 }
 
 @theme inline {
@@ -12,15 +130,189 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ============================================
+   OVERRIDE AUTOMÁTICO DAS CLASSES TAILWIND
+   ============================================ */
+
+/* Backgrounds */
+.bg-gray-50 {
+  background-color: var(--gray-50) !important;
+}
+
+.bg-white {
+  background-color: var(--card-background) !important;
+}
+
+.bg-gray-100 {
+  background-color: var(--gray-100) !important;
+}
+
+/* Textos */
+.text-gray-900 {
+  color: var(--gray-900) !important;
+}
+
+.text-gray-800 {
+  color: var(--gray-800) !important;
+}
+
+.text-gray-700 {
+  color: var(--gray-700) !important;
+}
+
+.text-gray-600 {
+  color: var(--gray-600) !important;
+}
+
+.text-gray-500 {
+  color: var(--gray-500) !important;
+}
+
+.text-gray-400 {
+  color: var(--gray-300) !important;
+}
+
+.text-gray-300 {
+  color: var(--gray-200) !important;
+}
+
+/* Borders */
+.border-gray-200 {
+  border-color: var(--gray-200) !important;
+}
+
+.border-gray-300 {
+  border-color: var(--gray-300) !important;
+}
+
+/* Hover backgrounds */
+.hover\:bg-gray-50:hover {
+  background-color: var(--gray-50) !important;
+}
+
+.hover\:bg-gray-100:hover {
+  background-color: var(--gray-100) !important;
+}
+
+.hover\:bg-gray-200:hover {
+  background-color: var(--gray-200) !important;
+}
+
+/* Hover texts */
+.hover\:text-gray-700:hover {
+  color: var(--gray-700) !important;
+}
+
+/* Hover borders */
+.hover\:border-gray-300:hover {
+  border-color: var(--gray-300) !important;
+}
+
+/* Shadow */
+.shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.dark .shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   ESTILOS GLOBAIS PARA INPUTS
+   ============================================ */
+
+/* Inputs, Selects e Textareas */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+select,
+textarea {
+  background-color: var(--input-background) !important;
+  color: var(--input-text) !important;
+  border-color: var(--input-border) !important;
+}
+
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder,
+input[type="number"]::placeholder,
+input[type="search"]::placeholder,
+textarea::placeholder {
+  color: var(--input-placeholder) !important;
+  opacity: 1;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--input-border-focus) !important;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.dark input[type="text"]:focus,
+.dark input[type="email"]:focus,
+.dark input[type="password"]:focus,
+.dark input[type="number"]:focus,
+.dark input[type="search"]:focus,
+.dark select:focus,
+.dark textarea:focus {
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+}
+
+/* Garante que texto em inputs nunca seja transparente */
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+  -webkit-text-fill-color: var(--input-text) !important;
+  opacity: 1 !important;
+}
+
+/* Autofill do navegador */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--input-background) inset !important;
+  -webkit-text-fill-color: var(--input-text) !important;
+  border-color: var(--input-border) !important;
+}
+
+/* ============================================
+   DARK MODE PARA ELEMENTOS ESPECIAIS
+   ============================================ */
+
+/* Scrollbar customizado para dark mode */
+.dark ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: var(--background-secondary);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--gray-300);
+  border-radius: 6px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-500);
+}
+
+/* Gradient para o logo */
+.bg-gradient-to-br.from-blue-500.to-purple-600 {
+  background: linear-gradient(to bottom right, #3b82f6, #9333ea);
 }
