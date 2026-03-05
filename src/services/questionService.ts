@@ -1,208 +1,98 @@
-import { 
-  collection, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc, 
-  doc, 
-  getDoc,
-  getDocs, 
-  query, 
-  where,
-  Timestamp 
-} from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { connectDB } from '@/lib/mongodb';
+import QuestionModel from '@/models/Question';
 import { Question, QuestionFormData, Alternativa } from '@/types';
 
+function toQuestion(doc: ReturnType<typeof QuestionModel.prototype.toObject> & { _id: unknown; createdAt: Date }): Question {
+  return {
+    id: doc._id.toString(),
+    enunciado: doc.enunciado,
+    alternativas: doc.alternativas as Alternativa[],
+    materia: doc.materia,
+    semestre: doc.semestre,
+    professorId: doc.professorId,
+    createdAt: doc.createdAt,
+    imagemUrl: doc.imagemUrl,
+  };
+}
+
 export const questionService = {
-  // Criar nova questão
   async createQuestion(data: QuestionFormData, professorId: string): Promise<string> {
-    try {
-      const alternativas: Alternativa[] = data.alternativas.map((texto, index) => ({
-        texto,
-        correta: index === data.alternativaCorreta
-      }));
+    await connectDB();
 
-      const questionData = {
-        enunciado: data.enunciado,
-        alternativas,
-        materia: data.materia,
-        semestre: data.semestre,
-        professorId,
-        createdAt: Timestamp.now()
-      };
+    const alternativas: Alternativa[] = data.alternativas.map((texto, index) => ({
+      texto,
+      correta: index === data.alternativaCorreta,
+    }));
 
-      const docRef = await addDoc(collection(db, 'questions'), questionData);
-      return docRef.id;
-    } catch (error) {
-      console.error('Error creating question:', error);
-      throw error;
-    }
+    const doc = await QuestionModel.create({
+      enunciado: data.enunciado,
+      alternativas,
+      materia: data.materia,
+      semestre: data.semestre,
+      professorId,
+    });
+
+    return doc._id.toString();
   },
 
-  // Buscar uma questão por ID
   async getQuestionById(questionId: string): Promise<Question | null> {
-    try {
-      const docRef = doc(db, 'questions', questionId);
-      const docSnap = await getDoc(docRef);
-      
-      if (!docSnap.exists()) {
-        return null;
-      }
-
-      const data = docSnap.data();
-      return {
-        id: docSnap.id,
-        enunciado: data.enunciado,
-        alternativas: data.alternativas,
-        materia: data.materia,
-        semestre: data.semestre,
-        professorId: data.professorId,
-        createdAt: data.createdAt.toDate(),
-        imagemUrl: data.imagemUrl
-      };
-    } catch (error) {
-      console.error('Error fetching question:', error);
-      throw error;
-    }
+    await connectDB();
+    const doc = await QuestionModel.findById(questionId).lean();
+    if (!doc) return null;
+    return toQuestion(doc as Parameters<typeof toQuestion>[0]);
   },
 
-  // Buscar todas as questões de um professor
   async getQuestionsByProfessor(professorId: string): Promise<Question[]> {
-    try {
-      // Query simples sem orderBy para evitar necessidade de índice composto
-      const q = query(
-        collection(db, 'questions'),
-        where('professorId', '==', professorId)
-      );
-
-      const querySnapshot = await getDocs(q);
-      const questions: Question[] = [];
-
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        questions.push({
-          id: doc.id,
-          enunciado: data.enunciado,
-          alternativas: data.alternativas,
-          materia: data.materia,
-          semestre: data.semestre,
-          professorId: data.professorId,
-          createdAt: data.createdAt.toDate(),
-          imagemUrl: data.imagemUrl
-        });
-      });
-
-      // Ordenar no lado do cliente (JavaScript)
-      return questions.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-    } catch (error) {
-      console.error('Error fetching questions:', error);
-      throw error;
-    }
+    await connectDB();
+    const docs = await QuestionModel.find({ professorId }).sort({ createdAt: -1 }).lean();
+    return docs.map((d) => toQuestion(d as Parameters<typeof toQuestion>[0]));
   },
 
-  // Buscar questões por filtros
   async getQuestionsByFilters(
     professorId: string,
     materia?: string,
     semestre?: number
   ): Promise<Question[]> {
-    try {
-      // Query simples
-      const q = query(
-        collection(db, 'questions'),
-        where('professorId', '==', professorId)
-      );
+    await connectDB();
+    const filter: Record<string, unknown> = { professorId };
+    if (materia) filter.materia = materia;
+    if (semestre) filter.semestre = semestre;
 
-      const querySnapshot = await getDocs(q);
-      const questions: Question[] = [];
-
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        
-        // Filtrar no lado do cliente
-        if (materia && data.materia !== materia) return;
-        if (semestre && data.semestre !== semestre) return;
-        
-        questions.push({
-          id: doc.id,
-          enunciado: data.enunciado,
-          alternativas: data.alternativas,
-          materia: data.materia,
-          semestre: data.semestre,
-          professorId: data.professorId,
-          createdAt: data.createdAt.toDate(),
-          imagemUrl: data.imagemUrl
-        });
-      });
-
-      // Ordenar no lado do cliente
-      return questions.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-    } catch (error) {
-      console.error('Error fetching filtered questions:', error);
-      throw error;
-    }
+    const docs = await QuestionModel.find(filter).sort({ createdAt: -1 }).lean();
+    return docs.map((d) => toQuestion(d as Parameters<typeof toQuestion>[0]));
   },
 
-  // Atualizar questão
   async updateQuestion(questionId: string, data: QuestionFormData): Promise<void> {
-    try {
-      const alternativas: Alternativa[] = data.alternativas.map((texto, index) => ({
-        texto,
-        correta: index === data.alternativaCorreta
-      }));
+    await connectDB();
 
-      const questionRef = doc(db, 'questions', questionId);
-      await updateDoc(questionRef, {
-        enunciado: data.enunciado,
-        alternativas,
-        materia: data.materia,
-        semestre: data.semestre
-      });
-    } catch (error) {
-      console.error('Error updating question:', error);
-      throw error;
-    }
+    const alternativas: Alternativa[] = data.alternativas.map((texto, index) => ({
+      texto,
+      correta: index === data.alternativaCorreta,
+    }));
+
+    await QuestionModel.findByIdAndUpdate(questionId, {
+      enunciado: data.enunciado,
+      alternativas,
+      materia: data.materia,
+      semestre: data.semestre,
+    });
   },
 
-  // Deletar questão
   async deleteQuestion(questionId: string): Promise<void> {
-    try {
-      const questionRef = doc(db, 'questions', questionId);
-      await deleteDoc(questionRef);
-    } catch (error) {
-      console.error('Error deleting question:', error);
-      throw error;
-    }
+    await connectDB();
+    await QuestionModel.findByIdAndDelete(questionId);
   },
 
-  // Contar questões disponíveis por filtros
   async countQuestionsByFilters(
     professorId: string,
     materias: string[],
     semestres: number[]
   ): Promise<number> {
-    try {
-      // Query simples
-      const q = query(
-        collection(db, 'questions'),
-        where('professorId', '==', professorId)
-      );
-
-      const querySnapshot = await getDocs(q);
-      let count = 0;
-
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        // Contar apenas se matéria e semestre estão nos filtros
-        if (materias.includes(data.materia) && semestres.includes(data.semestre)) {
-          count++;
-        }
-      });
-
-      return count;
-    } catch (error) {
-      console.error('Error counting questions:', error);
-      return 0;
-    }
-  }
+    await connectDB();
+    return QuestionModel.countDocuments({
+      professorId,
+      materia: { $in: materias },
+      semestre: { $in: semestres },
+    });
+  },
 };

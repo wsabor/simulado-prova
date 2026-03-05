@@ -1,0 +1,30 @@
+services:
+  mongo:
+    image: mongo:8
+    container_name: simulado-mongo
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - simulado-net
+
+  app:
+    build: .
+    container_name: simulado-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/simulado-prova
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+    depends_on:
+      - mongo
+    networks:
+      - simulado-net
+
+volumes:
+  mongo_data:
+
+networks:
+  simulado-net:
