@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { ProtectedRoute } from '@/components/common/ProtectedRoute';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { questionService } from '@/services/questionService';
 import { Question } from '@/types';
 
 export default function QuestoesPage() {
@@ -25,7 +24,9 @@ export default function QuestoesPage() {
   const loadQuestions = async () => {
     try {
       setLoading(true);
-      const data = await questionService.getQuestionsByProfessor(user!.id);
+      const res = await fetch('/api/questions');
+      if (!res.ok) throw new Error('Erro ao carregar questões');
+      const data: Question[] = await res.json();
       setQuestions(data);
       
       // Extrair matérias únicas
@@ -45,7 +46,8 @@ export default function QuestoesPage() {
     }
 
     try {
-      await questionService.deleteQuestion(questionId);
+      const res = await fetch(`/api/questions/${questionId}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Erro ao excluir');
       await loadQuestions();
       alert('Questão excluída com sucesso!');
     } catch (error) {

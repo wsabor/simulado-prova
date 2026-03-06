@@ -4,8 +4,7 @@ import { useState, useEffect } from 'react';
 import { ProtectedRoute } from '@/components/common/ProtectedRoute';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter, useParams } from 'next/navigation';
-import { questionService } from '@/services/questionService';
-import { QuestionFormData } from '@/types';
+import { QuestionFormData, Question } from '@/types';
 
 export default function EditarQuestaoPage() {
   const { user } = useAuth();
@@ -33,13 +32,13 @@ export default function EditarQuestaoPage() {
   const loadQuestion = async () => {
     try {
       setLoading(true);
-      const question = await questionService.getQuestionById(questionId);
-      
-      if (!question) {
+      const res = await fetch(`/api/questions/${questionId}`);
+      if (!res.ok) {
         alert('Questão não encontrada');
         router.push('/professor/questoes');
         return;
       }
+      const question: Question = await res.json();
 
       // Verificar se o professor é o dono da questão
       if (question.professorId !== user!.id) {
@@ -88,7 +87,12 @@ export default function EditarQuestaoPage() {
 
     try {
       setSaving(true);
-      await questionService.updateQuestion(questionId, formData);
+      const res = await fetch(`/api/questions/${questionId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error('Erro ao atualizar questão');
       alert('Questão atualizada com sucesso!');
       router.push('/professor/questoes');
     } catch (error) {

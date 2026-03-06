@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { ProtectedRoute } from '@/components/common/ProtectedRoute';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { questionService } from '@/services/questionService';
 import { QuestionFormData } from '@/types';
 
 export default function NovaQuestaoPage() {
@@ -41,7 +40,12 @@ export default function NovaQuestaoPage() {
 
     try {
       setLoading(true);
-      await questionService.createQuestion(formData, user!.id);
+      const res = await fetch('/api/questions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error('Erro ao criar questão');
       alert('Questão criada com sucesso!');
       router.push('/professor/questoes');
     } catch (error) {

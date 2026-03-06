@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { ProtectedRoute } from '@/components/common/ProtectedRoute';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { provaService } from '@/services/provaService';
 import { Prova } from '@/types';
 
 export default function ProvasPage() {
@@ -22,7 +21,9 @@ export default function ProvasPage() {
   const loadProvas = async () => {
     try {
       setLoading(true);
-      const data = await provaService.getProvasByProfessor(user!.id);
+      const res = await fetch('/api/provas');
+      if (!res.ok) throw new Error('Erro ao carregar provas');
+      const data: Prova[] = await res.json();
       setProvas(data);
     } catch (error) {
       console.error('Error loading provas:', error);
@@ -34,7 +35,12 @@ export default function ProvasPage() {
 
   const handleToggleAtiva = async (provaId: string, currentStatus: boolean) => {
     try {
-      await provaService.toggleProvaAtiva(provaId, !currentStatus);
+      const res = await fetch(`/api/provas/${provaId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ativa: !currentStatus }),
+      });
+      if (!res.ok) throw new Error('Erro ao atualizar');
       await loadProvas();
     } catch (error) {
       console.error('Error toggling prova:', error);
@@ -48,7 +54,8 @@ export default function ProvasPage() {
     }
 
     try {
-      await provaService.deleteProva(provaId);
+      const res = await fetch(`/api/provas/${provaId}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Erro ao excluir');
       await loadProvas();
       alert('Prova excluída com sucesso!');
     } catch (error) {

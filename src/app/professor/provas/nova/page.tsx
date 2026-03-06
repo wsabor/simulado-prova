@@ -4,10 +4,7 @@ import { useState, useEffect } from "react";
 import { ProtectedRoute } from "@/components/common/ProtectedRoute";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
-import { provaService } from "@/services/provaService";
-import { questionService } from "@/services/questionService";
-import { userService } from "@/services/userService";
-import { ProvaFormData, User } from "@/types";
+import { ProvaFormData, User, Question } from "@/types";
 
 export default function NovaProvaPage() {
   const { user } = useAuth();
@@ -21,7 +18,7 @@ export default function NovaProvaPage() {
     titulo: "",
     materias: [],
     semestres: [],
-    numQuestoes: 20,
+    numQuestoes: 10,
     tempoLimite: 60,
     alunosAtribuidos: [],
   });
@@ -44,7 +41,9 @@ export default function NovaProvaPage() {
 
   const loadAlunos = async () => {
     try {
-      const data = await userService.getAllAlunos();
+      const res = await fetch("/api/users");
+      if (!res.ok) throw new Error("Erro ao carregar alunos");
+      const data: User[] = await res.json();
       setAlunos(data);
     } catch (error) {
       console.error("Error loading alunos:", error);
@@ -55,7 +54,9 @@ export default function NovaProvaPage() {
     if (!user) return;
 
     try {
-      const questions = await questionService.getQuestionsByProfessor(user.id);
+      const res = await fetch("/api/questions");
+      if (!res.ok) throw new Error("Erro ao carregar questões");
+      const questions: Question[] = await res.json();
       const uniqueMaterias = Array.from(
         new Set(questions.map((q) => q.materia))
       );
@@ -69,11 +70,13 @@ export default function NovaProvaPage() {
     if (!user) return;
 
     try {
-      const count = await questionService.countQuestionsByFilters(
-        user.id,
-        formData.materias,
-        formData.semestres
-      );
+      const params = new URLSearchParams({
+        materias: formData.materias.join(","),
+        semestres: formData.semestres.join(","),
+      });
+      const res = await fetch(`/api/questions/count?${params}`);
+      if (!res.ok) throw new Error("Erro ao contar questões");
+      const { count } = await res.json();
       setQuestoesDisponiveis(count);
     } catch (error) {
       console.error("Error counting questions:", error);
@@ -115,7 +118,12 @@ export default function NovaProvaPage() {
 
     try {
       setLoading(true);
-      await provaService.createProva(formData, user.id);
+      const res = await fetch("/api/provas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error("Erro ao criar prova");
       alert("Prova criada com sucesso!");
       router.push("/professor/provas");
     } catch (error) {
@@ -351,23 +359,20 @@ export default function NovaProvaPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Número de Questões *
                   </label>
-                  <select
+                  <input
+                    type="number"
                     value={formData.numQuestoes}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        numQuestoes: parseInt(e.target.value),
+                        numQuestoes: parseInt(e.target.value) || 1,
                       })
                     }
+                    min="1"
+                    max="100"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
-                  >
-                    {[10, 20, 30, 40, 50].map((num) => (
-                      <option key={num} value={num}>
-                        {num} questões
-                      </option>
-                    ))}
-                  </select>
+                  />
                 </div>
 
                 <div>

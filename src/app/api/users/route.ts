@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic';
 // GET - listar alunos
 export async function GET() {
   const session = await getServerSession(authOptions);
-  if (!session || session.user.role !== 'professor') {
+  if (!session || !['professor', 'admin'].includes(session.user.role)) {
     return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
   }
 
@@ -35,7 +35,7 @@ export async function GET() {
 // POST - criar aluno
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
-  if (!session || session.user.role !== 'professor') {
+  if (!session || !['professor', 'admin'].includes(session.user.role)) {
     return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
   }
 
