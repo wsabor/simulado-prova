@@ -1,13 +1,13 @@
 // User Types
-export type UserRole = 'professor' | 'aluno';
+export type UserRole = 'admin' | 'professor' | 'aluno';
 
 export interface User {
   id: string;
   name: string;
   email: string;
   role: UserRole;
+  turma?: string;
   createdAt: Date;
-  photoURL?: string;
 }
 
 // Question Types

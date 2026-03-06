@@ -15,7 +15,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!loading && user) {
-      if (user.role === 'professor') {
+      if (user.role === 'admin' || user.role === 'professor') {
         router.push('/professor');
       } else {
         router.push('/aluno');

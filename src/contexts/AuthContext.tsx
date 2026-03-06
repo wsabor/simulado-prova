@@ -2,12 +2,13 @@
 
 import React, { createContext, useContext } from 'react';
 import { useSession, signIn, signOut as nextAuthSignOut } from 'next-auth/react';
+import { UserRole } from '@/types';
 
 interface AuthUser {
   id: string;
   name: string;
   email: string;
-  role: 'professor' | 'aluno';
+  role: UserRole;
 }
 
 interface AuthContextType {
@@ -34,7 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         id: session.user.id,
         name: session.user.name ?? '',
         email: session.user.email ?? '',
-        role: session.user.role as 'professor' | 'aluno',
+        role: session.user.role as UserRole,
       }
     : null;
 

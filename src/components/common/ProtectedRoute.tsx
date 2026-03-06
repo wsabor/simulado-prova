@@ -14,20 +14,23 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
   const { user, loading } = useAuth();
   const router = useRouter();
 
+  // admin tem acesso a tudo que professor tem
+  const hasAccess =
+    user && (allowedRoles.includes(user.role) || (user.role === 'admin' && allowedRoles.includes('professor')));
+
   useEffect(() => {
     if (!loading) {
       if (!user) {
         router.push('/login');
-      } else if (!allowedRoles.includes(user.role)) {
-        // Redirect to appropriate dashboard if role doesn't match
-        if (user.role === 'professor') {
+      } else if (!hasAccess) {
+        if (user.role === 'admin' || user.role === 'professor') {
           router.push('/professor');
         } else {
           router.push('/aluno');
         }
       }
     }
-  }, [user, loading, allowedRoles, router]);
+  }, [user, loading, hasAccess, router]);
 
   if (loading) {
     return (
@@ -37,7 +40,7 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
     );
   }
 
-  if (!user || !allowedRoles.includes(user.role)) {
+  if (!hasAccess) {
     return null;
   }
 

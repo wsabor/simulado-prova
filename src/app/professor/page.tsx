@@ -2,6 +2,7 @@
 
 import { ProtectedRoute } from '@/components/common/ProtectedRoute';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
+import { Avatar } from '@/components/common/Avatar';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 
@@ -22,21 +23,7 @@ export default function ProfessorDashboard() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                  <svg 
-                    className="w-7 h-7 text-white" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    viewBox="0 0 24 24"
-                  >
-                    <path 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      strokeWidth={2} 
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" 
-                    />
-                  </svg>
-                </div>
+                <Avatar name={user?.name || ''} size="md" href="/professor/perfil" />
                 <div>
                   <h1 className="text-2xl font-bold text-gray-800">Painel do Professor</h1>
                   <p className="text-sm text-gray-500">Bem-vindo, {user?.name}</p>
@@ -78,11 +65,25 @@ export default function ProfessorDashboard() {
                 Provas
               </a>
               <a
+                href="/professor/alunos"
+                className="border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              >
+                Alunos
+              </a>
+              <a
                 href="/professor/resultados"
                 className="border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300"
               >
                 Resultados
               </a>
+              {user?.role === 'admin' && (
+                <a
+                  href="/professor/admin"
+                  className="border-b-2 border-transparent py-4 px-1 text-sm font-medium text-orange-500 hover:text-orange-700 hover:border-orange-300"
+                >
+                  Admin
+                </a>
+              )}
             </div>
           </div>
         </nav>
