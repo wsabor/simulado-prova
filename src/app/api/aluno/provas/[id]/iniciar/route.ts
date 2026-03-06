@@ -43,6 +43,20 @@ export async function POST(
     return NextResponse.json({ error: 'Você não está atribuído a esta prova' }, { status: 403 });
   }
 
+  // Verificar se já existe tentativa finalizada (1 tentativa por prova)
+  const tentativaFinalizada = await TentativaModel.findOne({
+    provaId,
+    alunoId: session.user.id,
+    finalizada: { $ne: null },
+  }).lean();
+
+  if (tentativaFinalizada) {
+    return NextResponse.json(
+      { error: 'Você já realizou esta prova. Apenas 1 tentativa é permitida.' },
+      { status: 400 }
+    );
+  }
+
   // Verificar se já existe tentativa em andamento
   const tentativaExistente = await TentativaModel.findOne({
     provaId,

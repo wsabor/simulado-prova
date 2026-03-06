@@ -7,26 +7,45 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { Prova } from '@/types';
 
+interface TentativaResumo {
+  id: string;
+  provaId: string;
+  provaTitulo: string;
+  provaMaterias: string[];
+  nota: number | null;
+  totalQuestoes: number;
+  finalizada: string;
+}
+
 export default function AlunoDashboard() {
   const { user, signOut } = useAuth();
   const router = useRouter();
   const [provas, setProvas] = useState<Prova[]>([]);
+  const [tentativas, setTentativas] = useState<TentativaResumo[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (user) {
-      loadProvas();
+      loadData();
     }
   }, [user]);
 
-  const loadProvas = async () => {
+  const loadData = async () => {
     try {
-      const res = await fetch('/api/aluno/provas');
-      if (!res.ok) throw new Error('Erro ao carregar provas');
-      const data: Prova[] = await res.json();
-      setProvas(data);
+      const [provasRes, tentativasRes] = await Promise.all([
+        fetch('/api/aluno/provas'),
+        fetch('/api/aluno/tentativas'),
+      ]);
+      if (provasRes.ok) {
+        const provasData: Prova[] = await provasRes.json();
+        setProvas(provasData);
+      }
+      if (tentativasRes.ok) {
+        const tentativasData: TentativaResumo[] = await tentativasRes.json();
+        setTentativas(tentativasData);
+      }
     } catch (error) {
-      console.error('Error loading provas:', error);
+      console.error('Error loading data:', error);
     } finally {
       setLoading(false);
     }
@@ -36,6 +55,19 @@ export default function AlunoDashboard() {
     await signOut();
     router.push('/login');
   };
+
+  // IDs das provas já realizadas
+  const provasRealizadasIds = new Set(tentativas.map((t) => t.provaId));
+
+  // Provas disponíveis = atribuídas e ainda não realizadas
+  const provasDisponiveis = provas.filter((p) => !provasRealizadasIds.has(p.id));
+
+  // Média geral
+  const notasValidas = tentativas.filter((t) => t.nota !== null).map((t) => t.nota as number);
+  const mediaGeral =
+    notasValidas.length > 0
+      ? (notasValidas.reduce((a, b) => a + b, 0) / notasValidas.length).toFixed(1)
+      : '-';
 
   return (
     <ProtectedRoute allowedRoles={['aluno']}>
@@ -69,7 +101,9 @@ export default function AlunoDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">Provas Disponíveis</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-2">{loading ? '-' : provas.length}</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-2">
+                    {loading ? '-' : provasDisponiveis.length}
+                  </p>
                 </div>
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                   <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,7 +117,9 @@ export default function AlunoDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">Provas Realizadas</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-2">0</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-2">
+                    {loading ? '-' : tentativas.length}
+                  </p>
                 </div>
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                   <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -97,7 +133,7 @@ export default function AlunoDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">Média Geral</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-2">-</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-2">{loading ? '-' : mediaGeral}</p>
                 </div>
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
                   <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -119,7 +155,7 @@ export default function AlunoDashboard() {
                   <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
                   <p className="mt-4 text-gray-600">Carregando provas...</p>
                 </div>
-              ) : provas.length === 0 ? (
+              ) : provasDisponiveis.length === 0 ? (
                 <div className="text-center py-12 text-gray-500">
                   <svg className="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -129,7 +165,7 @@ export default function AlunoDashboard() {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {provas.map((prova) => (
+                  {provasDisponiveis.map((prova) => (
                     <div key={prova.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
                       <h3 className="font-semibold text-gray-900 mb-2">{prova.titulo}</h3>
                       <div className="space-y-1 text-sm text-gray-600 mb-4">
@@ -150,19 +186,52 @@ export default function AlunoDashboard() {
             </div>
           </div>
 
-          {/* Recent Results */}
+          {/* Provas Realizadas */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200">
             <div className="p-6 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-800">Resultados Recentes</h2>
+              <h2 className="text-lg font-semibold text-gray-800">Provas Realizadas</h2>
             </div>
             <div className="p-6">
-              <div className="text-center py-12 text-gray-500">
-                <svg className="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                </svg>
-                <p>Você ainda não realizou nenhuma prova</p>
-                <p className="text-sm mt-2">Suas notas aparecerão aqui</p>
-              </div>
+              {loading ? (
+                <div className="text-center py-8">
+                  <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                </div>
+              ) : tentativas.length === 0 ? (
+                <div className="text-center py-12 text-gray-500">
+                  <svg className="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                  </svg>
+                  <p>Você ainda não realizou nenhuma prova</p>
+                  <p className="text-sm mt-2">Suas notas aparecerão aqui</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {tentativas.map((t) => (
+                    <div
+                      key={t.id}
+                      className="flex items-center justify-between p-4 border border-gray-200 rounded-lg"
+                    >
+                      <div>
+                        <h3 className="font-semibold text-gray-900">{t.provaTitulo}</h3>
+                        <p className="text-sm text-gray-500">
+                          {t.provaMaterias.join(', ')} &middot; {t.totalQuestoes} questões &middot;{' '}
+                          {new Date(t.finalizada).toLocaleDateString('pt-BR')}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p
+                          className={`text-2xl font-bold ${
+                            (t.nota ?? 0) >= 6 ? 'text-green-600' : 'text-red-600'
+                          }`}
+                        >
+                          {t.nota !== null ? t.nota : '-'}
+                        </p>
+                        <p className="text-xs text-gray-500">Nota</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </main>
