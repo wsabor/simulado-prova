@@ -26,7 +26,7 @@ Sistema de simulados e provas online desenvolvido para uso em sala de aula. Perm
 ### Aluno
 
 - Dashboard com provas disponiveis e realizadas
-- Interface de prova estilo SATE/Cebraspe (sidebar + painel de questao)
+- Interface de prova com barra lateral com informações sobre a prova + painel de questao
 - Timer com contagem regressiva e auto-finalizacao
 - Navegacao entre questoes via grid numerado
 - Embaralhamento de questoes e alternativas
@@ -157,4 +157,4 @@ O projeto usa GitHub Actions com dois workflows:
 
 ## Licenca
 
-Projeto desenvolvido para uso educacional no SENAI.
+Projeto desenvolvido para uso educacional.

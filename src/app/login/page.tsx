@@ -1,31 +1,31 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/contexts/AuthContext';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function LoginPage() {
   const { user, loading, signIn } = useAuth();
   const router = useRouter();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (!loading && user) {
-      if (user.role === 'admin' || user.role === 'professor') {
-        router.push('/professor');
+      if (user.role === "admin" || user.role === "professor") {
+        router.push("/professor");
       } else {
-        router.push('/aluno');
+        router.push("/aluno");
       }
     }
   }, [user, loading, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setSubmitting(true);
 
     const result = await signIn(email, password);
@@ -66,17 +66,24 @@ export default function LoginPage() {
               </svg>
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Sistema de Provas</h1>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            Sistema de Provas
+          </h1>
           <p className="text-gray-600">Simulados Online para Estudantes</p>
         </div>
 
         {/* Login Card */}
         <div className="bg-white rounded-2xl shadow-2xl p-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Bem-vindo!</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+            Bem-vindo!
+          </h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Email
               </label>
               <input
@@ -92,7 +99,10 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Senha
               </label>
               <input
@@ -118,14 +128,17 @@ export default function LoginPage() {
               disabled={submitting}
               className="w-full bg-linear-to-r from-blue-500 to-purple-600 text-white font-semibold py-3 px-6 rounded-lg hover:opacity-90 transition-opacity duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {submitting ? 'Entrando...' : 'Entrar'}
+              {submitting ? "Entrando..." : "Entrar"}
             </button>
           </form>
         </div>
 
         {/* Footer */}
         <div className="text-center mt-6 text-white">
-          <p className="text-sm opacity-90">Sistema de Provas — SENAI</p>
+          <p className="text-sm opacity-90">
+            &copy; {new Date().getFullYear()} wsabor.dev. Todos os direitos
+            reservados.
+          </p>
         </div>
       </div>
     </div>
