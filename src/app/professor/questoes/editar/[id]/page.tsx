@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ProtectedRoute } from '@/components/common/ProtectedRoute';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter, useParams } from 'next/navigation';
+import { ProfessorLayout } from '@/components/professor/ProfessorLayout';
 import { QuestionFormData, Question } from '@/types';
 
 export default function EditarQuestaoPage() {
@@ -111,43 +111,20 @@ export default function EditarQuestaoPage() {
 
   if (loading) {
     return (
-      <ProtectedRoute allowedRoles={['professor']}>
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <ProfessorLayout titulo="Editar Questão" subtitulo="Carregando...">
+        <div className="flex items-center justify-center py-16">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
             <p className="text-gray-600">Carregando questão...</p>
           </div>
         </div>
-      </ProtectedRoute>
+      </ProfessorLayout>
     );
   }
 
   return (
-    <ProtectedRoute allowedRoles={['professor']}>
-      <div className="min-h-screen bg-gray-50">
-        {/* Header */}
-        <header className="bg-white shadow-sm">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => router.push('/professor/questoes')}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-800">Editar Questão</h1>
-                <p className="text-sm text-gray-500">Modificar questão existente</p>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* Form */}
-        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+    <ProfessorLayout titulo="Editar Questão" subtitulo="Modificar questão existente">
+          <form onSubmit={handleSubmit} className="max-w-4xl bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             
             {/* Enunciado */}
             <div className="mb-6">
@@ -265,8 +242,6 @@ export default function EditarQuestaoPage() {
               </button>
             </div>
           </form>
-        </main>
-      </div>
-    </ProtectedRoute>
+    </ProfessorLayout>
   );
 }

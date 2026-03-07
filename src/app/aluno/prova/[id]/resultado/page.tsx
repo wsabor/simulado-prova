@@ -10,6 +10,7 @@ export default function ResultadoPage() {
   const nota = searchParams.get('nota') || '0';
   const acertos = searchParams.get('acertos') || '0';
   const total = searchParams.get('total') || '0';
+  const tentativaId = searchParams.get('tentativaId');
   const notaNum = parseFloat(nota);
 
   return (
@@ -54,12 +55,22 @@ export default function ResultadoPage() {
             </div>
           </div>
 
-          <button
-            onClick={() => router.push('/aluno')}
-            className="w-full px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Voltar ao Dashboard
-          </button>
+          <div className="space-y-3">
+            {tentativaId && (
+              <button
+                onClick={() => router.push(`/aluno/prova/${tentativaId}/revisao`)}
+                className="w-full px-6 py-3 bg-purple-600 text-white font-medium rounded-lg hover:bg-purple-700 transition-colors"
+              >
+                Revisar Prova
+              </button>
+            )}
+            <button
+              onClick={() => router.push('/aluno')}
+              className="w-full px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Voltar ao Dashboard
+            </button>
+          </div>
         </div>
       </div>
     </ProtectedRoute>

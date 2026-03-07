@@ -218,21 +218,34 @@ export default function AlunoDashboard() {
                           {new Date(t.finalizada).toLocaleDateString('pt-BR')}
                         </p>
                       </div>
-                      <div className="text-right">
-                        <p
-                          className={`text-2xl font-bold ${
-                            (t.nota ?? 0) >= 6 ? 'text-green-600' : 'text-red-600'
-                          }`}
+                      <div className="flex items-center gap-4">
+                        <button
+                          onClick={() => router.push(`/aluno/prova/${t.id}/revisao`)}
+                          className="px-3 py-1.5 text-xs font-medium text-purple-600 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors"
                         >
-                          {t.nota !== null ? t.nota : '-'}
-                        </p>
-                        <p className="text-xs text-gray-500">Nota</p>
+                          Revisar
+                        </button>
+                        <div className="text-right">
+                          <p
+                            className={`text-2xl font-bold ${
+                              (t.nota ?? 0) >= 6 ? 'text-green-600' : 'text-red-600'
+                            }`}
+                          >
+                            {t.nota !== null ? t.nota : '-'}
+                          </p>
+                          <p className="text-xs text-gray-500">Nota</p>
+                        </div>
                       </div>
                     </div>
                   ))}
                 </div>
               )}
             </div>
+          </div>
+          <div className="text-center mt-8">
+            <a href="/creditos" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
+              Créditos
+            </a>
           </div>
         </main>
       </div>

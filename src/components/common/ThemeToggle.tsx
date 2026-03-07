@@ -35,14 +35,14 @@ export function ThemeToggle() {
 
       {showMenu && (
         <>
-          {/* Overlay para fechar o menu ao clicar fora */}
           <div
             className="fixed inset-0 z-10"
             onClick={() => setShowMenu(false)}
           />
-          
-          {/* Menu */}
-          <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20">
+
+          <div className="absolute right-0 mt-2 w-40 rounded-lg shadow-lg border py-1 z-20"
+            style={{ backgroundColor: 'var(--card-background)', borderColor: 'var(--card-border)' }}
+          >
             {options.map((option) => (
               <button
                 key={option.value}
@@ -50,10 +50,10 @@ export function ThemeToggle() {
                   setTheme(option.value);
                   setShowMenu(false);
                 }}
-                className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-3 ${
+                className={`w-full px-4 py-2 text-left text-sm flex items-center gap-3 transition-colors ${
                   theme === option.value
                     ? 'text-blue-600 bg-blue-50'
-                    : 'text-gray-700'
+                    : 'text-gray-700 hover:bg-gray-100'
                 }`}
               >
                 <span className="text-lg">{option.icon}</span>

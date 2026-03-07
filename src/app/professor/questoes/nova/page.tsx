@@ -1,13 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { ProtectedRoute } from '@/components/common/ProtectedRoute';
-import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
+import { ProfessorLayout } from '@/components/professor/ProfessorLayout';
 import { QuestionFormData } from '@/types';
 
 export default function NovaQuestaoPage() {
-  const { user } = useAuth();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -63,31 +61,8 @@ export default function NovaQuestaoPage() {
   };
 
   return (
-    <ProtectedRoute allowedRoles={['professor']}>
-      <div className="min-h-screen bg-gray-50">
-        {/* Header */}
-        <header className="bg-white shadow-sm">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => router.push('/professor/questoes')}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-800">Nova Questão</h1>
-                <p className="text-sm text-gray-500">Adicionar questão ao banco</p>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* Form */}
-        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+    <ProfessorLayout titulo="Nova Questão" subtitulo="Adicionar questão ao banco">
+          <form onSubmit={handleSubmit} className="max-w-4xl bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             
             {/* Enunciado */}
             <div className="mb-6">
@@ -174,6 +149,35 @@ export default function NovaQuestaoPage() {
               </p>
             </div>
 
+            {/* Feedback */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Feedback (opcional)
+              </label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-green-600 mb-1">Feedback de Acerto</label>
+                  <textarea
+                    value={formData.feedbackAcerto || ''}
+                    onChange={(e) => setFormData({ ...formData, feedbackAcerto: e.target.value })}
+                    rows={3}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none text-sm"
+                    placeholder="Exibido quando o aluno acertar a questão..."
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-red-600 mb-1">Feedback de Erro</label>
+                  <textarea
+                    value={formData.feedbackErro || ''}
+                    onChange={(e) => setFormData({ ...formData, feedbackErro: e.target.value })}
+                    rows={3}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent resize-none text-sm"
+                    placeholder="Exibido quando o aluno errar a questão..."
+                  />
+                </div>
+              </div>
+            </div>
+
             {/* Actions */}
             <div className="flex justify-end gap-4 pt-6 border-t border-gray-200">
               <button
@@ -205,8 +209,6 @@ export default function NovaQuestaoPage() {
               </button>
             </div>
           </form>
-        </main>
-      </div>
-    </ProtectedRoute>
+    </ProfessorLayout>
   );
 }

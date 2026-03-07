@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { ProtectedRoute } from '@/components/common/ProtectedRoute';
 import { useRouter } from 'next/navigation';
+import { ProfessorLayout } from '@/components/professor/ProfessorLayout';
 
 const EXEMPLO_JSON = `[
   {
@@ -16,7 +16,9 @@ const EXEMPLO_JSON = `[
     ],
     "alternativaCorreta": 1,
     "materia": "Desenvolvimento Web",
-    "semestre": 1
+    "semestre": 1,
+    "feedbackAcerto": "Correto! CSS (Cascading Style Sheets) é a linguagem usada para estilizar páginas web.",
+    "feedbackErro": "Incorreto. A resposta correta é CSS (Cascading Style Sheets)."
   },
   {
     "enunciado": "O que significa HTML?",
@@ -111,26 +113,7 @@ export default function ImportarQuestoesPage() {
   };
 
   return (
-    <ProtectedRoute allowedRoles={['professor', 'admin']}>
-      <div className="min-h-screen bg-gray-50">
-        <header className="bg-white shadow-sm">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex justify-between items-center">
-              <div>
-                <h1 className="text-2xl font-bold text-gray-800">Importar Questões</h1>
-                <p className="text-sm text-gray-500">Importe questões em lote via JSON</p>
-              </div>
-              <button
-                onClick={() => router.push('/professor/questoes')}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Voltar
-              </button>
-            </div>
-          </div>
-        </header>
-
-        <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <ProfessorLayout titulo="Importar Questões" subtitulo="Importe questões em lote via JSON">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
             {/* Editor JSON */}
             <div className="lg:col-span-3">
@@ -235,6 +218,14 @@ export default function ImportarQuestoesPage() {
                       <p className="font-mono text-xs font-bold text-green-600">imagemUrl</p>
                       <p className="text-xs text-gray-500 mt-1">URL de imagem (opcional)</p>
                     </div>
+                    <div className="bg-gray-50 rounded-lg p-3">
+                      <p className="font-mono text-xs font-bold text-green-600">feedbackAcerto</p>
+                      <p className="text-xs text-gray-500 mt-1">Texto exibido ao acertar (opcional)</p>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg p-3">
+                      <p className="font-mono text-xs font-bold text-green-600">feedbackErro</p>
+                      <p className="text-xs text-gray-500 mt-1">Texto exibido ao errar (opcional)</p>
+                    </div>
                   </div>
 
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-4">
@@ -246,8 +237,6 @@ export default function ImportarQuestoesPage() {
               </div>
             </div>
           </div>
-        </main>
-      </div>
-    </ProtectedRoute>
+    </ProfessorLayout>
   );
 }

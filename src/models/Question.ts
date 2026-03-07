@@ -12,6 +12,8 @@ export interface IQuestion extends Document {
   semestre: number;
   professorId: string;
   imagemUrl?: string;
+  feedbackAcerto?: string;
+  feedbackErro?: string;
   createdAt: Date;
 }
 
@@ -31,6 +33,8 @@ const QuestionSchema = new Schema<IQuestion>(
     semestre: { type: Number, required: true },
     professorId: { type: String, required: true, index: true },
     imagemUrl: { type: String },
+    feedbackAcerto: { type: String },
+    feedbackErro: { type: String },
   },
   { timestamps: true }
 );

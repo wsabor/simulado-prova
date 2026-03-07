@@ -61,6 +61,8 @@ export async function POST(req: NextRequest) {
       semestre: q.semestre,
       professorId: session.user.id,
       imagemUrl: q.imagemUrl || undefined,
+      feedbackAcerto: q.feedbackAcerto || undefined,
+      feedbackErro: q.feedbackErro || undefined,
     });
   }
 

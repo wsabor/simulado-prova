@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ProtectedRoute } from "@/components/common/ProtectedRoute";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
+import { ProfessorLayout } from "@/components/professor/ProfessorLayout";
 import { ProvaFormData, User, Question } from "@/types";
 
 export default function NovaProvaPage() {
@@ -187,41 +187,8 @@ export default function NovaProvaPage() {
   };
 
   return (
-    <ProtectedRoute allowedRoles={["professor"]}>
-      <div className="min-h-screen bg-gray-50">
-        {/* Header */}
-        <header className="bg-white shadow-sm">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => router.push("/professor/provas")}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                <svg
-                  className="w-6 h-6 text-gray-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-              </button>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-800">Nova Prova</h1>
-                <p className="text-sm text-gray-500">Configurar simulado</p>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* Form */}
-        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
+    <ProfessorLayout titulo="Nova Prova" subtitulo="Configurar simulado">
+          <form onSubmit={handleSubmit} className="max-w-4xl space-y-6">
             {/* Título */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
               <h2 className="text-lg font-semibold text-gray-800 mb-4">
@@ -488,8 +455,6 @@ export default function NovaProvaPage() {
               </button>
             </div>
           </form>
-        </main>
-      </div>
-    </ProtectedRoute>
+    </ProfessorLayout>
   );
 }

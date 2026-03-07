@@ -38,19 +38,19 @@ export default function LoginPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600">
+      <div className="min-h-screen flex items-center justify-center login-bg">
         <div className="text-white text-xl">Carregando...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 p-4">
+    <div className="min-h-screen flex items-center justify-center login-bg p-4">
       <div className="max-w-md w-full">
         {/* Logo/Title Card */}
         <div className="bg-white rounded-2xl shadow-2xl p-8 mb-6 text-center">
           <div className="mb-6">
-            <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mx-auto flex items-center justify-center">
+            <div className="w-20 h-20 login-icon rounded-2xl mx-auto flex items-center justify-center">
               <svg
                 className="w-12 h-12 text-white"
                 fill="none"
@@ -126,7 +126,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full bg-linear-to-r from-blue-500 to-purple-600 text-white font-semibold py-3 px-6 rounded-lg hover:opacity-90 transition-opacity duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full login-btn text-white font-semibold py-3 px-6 rounded-lg hover:opacity-90 transition-opacity duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {submitting ? "Entrando..." : "Entrar"}
             </button>
@@ -139,6 +139,12 @@ export default function LoginPage() {
             &copy; {new Date().getFullYear()} wsabor.dev. Todos os direitos
             reservados.
           </p>
+          <a
+            href="/creditos"
+            className="text-xs opacity-80 hover:opacity-100 transition-opacity mt-1 inline-block"
+          >
+            Créditos
+          </a>
         </div>
       </div>
     </div>

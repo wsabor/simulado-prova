@@ -4,56 +4,57 @@
   /* Backgrounds */
   --background: #ffffff;
   --background-secondary: #f9fafb;
-  
+
   /* Foreground (textos) */
   --foreground: #111827;
   --foreground-secondary: #6b7280;
   --foreground-muted: #9ca3af;
-  
+
   /* Inputs */
   --input-background: #ffffff;
   --input-text: #000000;
   --input-border: #d1d5db;
   --input-border-focus: #3b82f6;
   --input-placeholder: #9ca3af;
-  
+
   /* Cards e Containers */
   --card-background: #ffffff;
   --card-border: #e5e7eb;
-  
+
   /* Borders */
   --border: #e5e7eb;
   --border-secondary: #d1d5db;
-  
+
   /* Primary (azul) */
   --primary: #3b82f6;
   --primary-hover: #2563eb;
   --primary-light: #eff6ff;
   --primary-text: #1e40af;
-  
+
   /* Success (verde) */
   --success: #10b981;
   --success-hover: #059669;
   --success-light: #d1fae5;
   --success-text: #065f46;
-  
+
   /* Warning (amarelo) */
   --warning: #f59e0b;
   --warning-hover: #d97706;
   --warning-light: #fef3c7;
   --warning-text: #92400e;
-  
+
   /* Error (vermelho) */
   --error: #ef4444;
   --error-hover: #dc2626;
   --error-light: #fee2e2;
   --error-text: #991b1b;
-  
+
   /* Gray scale */
   --gray-50: #f9fafb;
   --gray-100: #f3f4f6;
   --gray-200: #e5e7eb;
   --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
   --gray-500: #6b7280;
   --gray-600: #4b5563;
   --gray-700: #374151;
@@ -61,61 +62,61 @@
   --gray-900: #111827;
 }
 
-/* Aplicar dark mode quando a classe .dark estiver no html */
 .dark {
   /* Backgrounds */
   --background: #0f172a;
   --background-secondary: #1e293b;
-  
+
   /* Foreground (textos) */
   --foreground: #f1f5f9;
   --foreground-secondary: #cbd5e1;
   --foreground-muted: #94a3b8;
-  
+
   /* Inputs */
   --input-background: #1e293b;
   --input-text: #f1f5f9;
   --input-border: #475569;
   --input-border-focus: #60a5fa;
   --input-placeholder: #64748b;
-  
+
   /* Cards e Containers */
   --card-background: #1e293b;
   --card-border: #334155;
-  
+
   /* Borders */
   --border: #334155;
   --border-secondary: #475569;
-  
+
   /* Primary (azul) */
   --primary: #60a5fa;
   --primary-hover: #3b82f6;
   --primary-light: #1e3a8a;
   --primary-text: #93c5fd;
-  
+
   /* Success (verde) */
   --success: #34d399;
   --success-hover: #10b981;
   --success-light: #064e3b;
   --success-text: #6ee7b7;
-  
+
   /* Warning (amarelo) */
   --warning: #fbbf24;
   --warning-hover: #f59e0b;
   --warning-light: #78350f;
   --warning-text: #fcd34d;
-  
+
   /* Error (vermelho) */
   --error: #f87171;
   --error-hover: #ef4444;
   --error-light: #7f1d1d;
   --error-text: #fca5a5;
-  
-  /* Gray scale para dark mode */
+
+  /* Gray scale invertido */
   --gray-50: #1e293b;
   --gray-100: #334155;
   --gray-200: #475569;
   --gray-300: #64748b;
+  --gray-400: #94a3b8;
   --gray-500: #94a3b8;
   --gray-600: #cbd5e1;
   --gray-700: #e2e8f0;
@@ -137,97 +138,150 @@ body {
 }
 
 /* ============================================
-   OVERRIDE AUTOMÁTICO DAS CLASSES TAILWIND
+   GRAY SCALE OVERRIDES
    ============================================ */
 
 /* Backgrounds */
-.bg-gray-50 {
-  background-color: var(--gray-50) !important;
-}
-
-.bg-white {
-  background-color: var(--card-background) !important;
-}
-
-.bg-gray-100 {
-  background-color: var(--gray-100) !important;
-}
+.bg-white { background-color: var(--card-background) !important; }
+.bg-gray-50 { background-color: var(--gray-50) !important; }
+.bg-gray-100 { background-color: var(--gray-100) !important; }
+.bg-gray-200 { background-color: var(--gray-200) !important; }
+.bg-gray-700 { background-color: var(--gray-700) !important; }
 
 /* Textos */
-.text-gray-900 {
-  color: var(--gray-900) !important;
-}
-
-.text-gray-800 {
-  color: var(--gray-800) !important;
-}
-
-.text-gray-700 {
-  color: var(--gray-700) !important;
-}
-
-.text-gray-600 {
-  color: var(--gray-600) !important;
-}
-
-.text-gray-500 {
-  color: var(--gray-500) !important;
-}
-
-.text-gray-400 {
-  color: var(--gray-300) !important;
-}
-
-.text-gray-300 {
-  color: var(--gray-200) !important;
-}
+.text-white { color: #ffffff !important; }
+.text-gray-300 { color: var(--gray-300) !important; }
+.text-gray-400 { color: var(--gray-400) !important; }
+.text-gray-500 { color: var(--gray-500) !important; }
+.text-gray-600 { color: var(--gray-600) !important; }
+.text-gray-700 { color: var(--gray-700) !important; }
+.text-gray-800 { color: var(--gray-800) !important; }
+.text-gray-900 { color: var(--gray-900) !important; }
 
 /* Borders */
-.border-gray-200 {
-  border-color: var(--gray-200) !important;
-}
-
-.border-gray-300 {
-  border-color: var(--gray-300) !important;
-}
+.border-gray-100 { border-color: var(--gray-100) !important; }
+.border-gray-200 { border-color: var(--gray-200) !important; }
+.border-gray-300 { border-color: var(--gray-300) !important; }
+.divide-gray-100 > :not([hidden]) ~ :not([hidden]) { border-color: var(--gray-100) !important; }
+.divide-gray-200 > :not([hidden]) ~ :not([hidden]) { border-color: var(--gray-200) !important; }
 
 /* Hover backgrounds */
-.hover\:bg-gray-50:hover {
-  background-color: var(--gray-50) !important;
-}
-
-.hover\:bg-gray-100:hover {
-  background-color: var(--gray-100) !important;
-}
-
-.hover\:bg-gray-200:hover {
-  background-color: var(--gray-200) !important;
-}
+.hover\:bg-gray-50:hover { background-color: var(--gray-50) !important; }
+.hover\:bg-gray-100:hover { background-color: var(--gray-100) !important; }
+.hover\:bg-gray-200:hover { background-color: var(--gray-200) !important; }
 
 /* Hover texts */
-.hover\:text-gray-700:hover {
-  color: var(--gray-700) !important;
-}
+.hover\:text-gray-700:hover { color: var(--gray-700) !important; }
 
 /* Hover borders */
-.hover\:border-gray-300:hover {
-  border-color: var(--gray-300) !important;
-}
+.hover\:border-gray-300:hover { border-color: var(--gray-300) !important; }
 
-/* Shadow */
-.shadow-sm {
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-}
+/* ============================================
+   BLUE OVERRIDES
+   ============================================ */
+.dark .bg-blue-50 { background-color: rgba(59, 130, 246, 0.15) !important; }
+.dark .bg-blue-100 { background-color: rgba(59, 130, 246, 0.2) !important; }
+.dark .bg-blue-600 { background-color: #3b82f6 !important; }
+.dark .text-blue-600 { color: #93c5fd !important; }
+.dark .text-blue-700 { color: #93c5fd !important; }
+.dark .text-blue-800 { color: #bfdbfe !important; }
+.dark .text-blue-200 { color: #bfdbfe !important; }
+.dark .border-blue-200 { border-color: rgba(59, 130, 246, 0.3) !important; }
+.dark .border-blue-300 { border-color: rgba(59, 130, 246, 0.4) !important; }
+.dark .border-blue-500 { border-color: #60a5fa !important; }
+.dark .hover\:bg-blue-100:hover { background-color: rgba(59, 130, 246, 0.25) !important; }
+.dark .hover\:bg-blue-700:hover { background-color: #2563eb !important; }
+.dark .hover\:text-blue-700:hover { color: #93c5fd !important; }
+.dark .ring-blue-500 { --tw-ring-color: #60a5fa !important; }
+.dark .focus\:ring-blue-500:focus { --tw-ring-color: #60a5fa !important; }
 
-.dark .shadow-sm {
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+/* ============================================
+   GREEN OVERRIDES
+   ============================================ */
+.dark .bg-green-50 { background-color: rgba(16, 185, 129, 0.12) !important; }
+.dark .bg-green-100 { background-color: rgba(16, 185, 129, 0.18) !important; }
+.dark .bg-green-200 { background-color: rgba(16, 185, 129, 0.25) !important; }
+.dark .bg-green-500 { background-color: #10b981 !important; }
+.dark .bg-green-600 { background-color: #059669 !important; }
+.dark .text-green-600 { color: #6ee7b7 !important; }
+.dark .text-green-700 { color: #6ee7b7 !important; }
+.dark .text-green-800 { color: #a7f3d0 !important; }
+.dark .border-green-200 { border-color: rgba(16, 185, 129, 0.3) !important; }
+.dark .border-green-300 { border-color: rgba(16, 185, 129, 0.4) !important; }
+.dark .hover\:bg-green-100:hover { background-color: rgba(16, 185, 129, 0.22) !important; }
+.dark .hover\:bg-green-200:hover { background-color: rgba(16, 185, 129, 0.3) !important; }
+.dark .hover\:bg-green-700:hover { background-color: #047857 !important; }
+
+/* ============================================
+   RED OVERRIDES
+   ============================================ */
+.dark .bg-red-50 { background-color: rgba(239, 68, 68, 0.12) !important; }
+.dark .bg-red-100 { background-color: rgba(239, 68, 68, 0.18) !important; }
+.dark .bg-red-200 { background-color: rgba(239, 68, 68, 0.25) !important; }
+.dark .bg-red-400 { background-color: #f87171 !important; }
+.dark .bg-red-500 { background-color: #ef4444 !important; }
+.dark .text-red-500 { color: #fca5a5 !important; }
+.dark .text-red-600 { color: #fca5a5 !important; }
+.dark .text-red-700 { color: #fca5a5 !important; }
+.dark .text-red-800 { color: #fecaca !important; }
+.dark .border-red-200 { border-color: rgba(239, 68, 68, 0.3) !important; }
+.dark .border-red-300 { border-color: rgba(239, 68, 68, 0.4) !important; }
+.dark .hover\:bg-red-100:hover { background-color: rgba(239, 68, 68, 0.22) !important; }
+.dark .hover\:bg-red-200:hover { background-color: rgba(239, 68, 68, 0.3) !important; }
+
+/* ============================================
+   YELLOW/WARNING OVERRIDES
+   ============================================ */
+.dark .bg-yellow-50 { background-color: rgba(245, 158, 11, 0.12) !important; }
+.dark .bg-yellow-100 { background-color: rgba(245, 158, 11, 0.18) !important; }
+.dark .text-yellow-600 { color: #fcd34d !important; }
+.dark .text-yellow-800 { color: #fef3c7 !important; }
+.dark .border-yellow-200 { border-color: rgba(245, 158, 11, 0.3) !important; }
+
+/* ============================================
+   PURPLE OVERRIDES
+   ============================================ */
+.dark .bg-purple-50 { background-color: rgba(139, 92, 246, 0.12) !important; }
+.dark .bg-purple-100 { background-color: rgba(139, 92, 246, 0.18) !important; }
+.dark .bg-purple-600 { background-color: #7c3aed !important; }
+.dark .text-purple-600 { color: #c4b5fd !important; }
+.dark .text-purple-700 { color: #c4b5fd !important; }
+.dark .hover\:bg-purple-100:hover { background-color: rgba(139, 92, 246, 0.22) !important; }
+
+/* ============================================
+   ORANGE OVERRIDES
+   ============================================ */
+.dark .text-orange-500 { color: #fb923c !important; }
+.dark .text-orange-600 { color: #fdba74 !important; }
+.dark .border-orange-500 { border-color: #fb923c !important; }
+.dark .border-orange-300 { border-color: rgba(251, 146, 60, 0.4) !important; }
+.dark .hover\:text-orange-700:hover { color: #fdba74 !important; }
+.dark .hover\:border-orange-300:hover { border-color: rgba(251, 146, 60, 0.4) !important; }
+
+/* ============================================
+   CYAN OVERRIDES
+   ============================================ */
+.dark .bg-cyan-500 { background-color: #06b6d4 !important; }
+
+/* ============================================
+   SHADOW OVERRIDES
+   ============================================ */
+.shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+.dark .shadow-sm { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4); }
+.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important; }
+.dark .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4) !important; }
+.dark .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4) !important; }
+
+/* ============================================
+   GRADIENTS
+   ============================================ */
+.dark .bg-gradient-to-r.from-blue-600.to-blue-800 {
+  background: linear-gradient(to right, #2563eb, #1e3a8a) !important;
 }
 
 /* ============================================
    ESTILOS GLOBAIS PARA INPUTS
    ============================================ */
-
-/* Inputs, Selects e Textareas */
 input[type="text"],
 input[type="email"],
 input[type="password"],
@@ -272,7 +326,6 @@ textarea:focus {
   box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
 }
 
-/* Garante que texto em inputs nunca seja transparente */
 input:not([type="checkbox"]):not([type="radio"]),
 select,
 textarea {
@@ -280,7 +333,6 @@ textarea {
   opacity: 1 !important;
 }
 
-/* Autofill do navegador */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
@@ -289,11 +341,26 @@ input:-webkit-autofill:focus {
   border-color: var(--input-border) !important;
 }
 
-/* ============================================
-   DARK MODE PARA ELEMENTOS ESPECIAIS
-   ============================================ */
+/* Checkbox e radio em dark mode */
+.dark input[type="checkbox"] {
+  background-color: var(--input-background);
+  border-color: var(--input-border);
+}
 
-/* Scrollbar customizado para dark mode */
+.dark input[type="radio"] {
+  background-color: var(--input-background);
+  border-color: var(--input-border);
+}
+
+/* File input */
+.dark .file\:bg-blue-50::file-selector-button {
+  background-color: rgba(59, 130, 246, 0.15) !important;
+  color: #93c5fd !important;
+}
+
+/* ============================================
+   DARK MODE SCROLLBAR
+   ============================================ */
 .dark ::-webkit-scrollbar {
   width: 12px;
   height: 12px;
@@ -309,10 +376,60 @@ input:-webkit-autofill:focus {
 }
 
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: var(--gray-500);
+  background: var(--gray-400);
 }
 
-/* Gradient para o logo */
-.bg-gradient-to-br.from-blue-500.to-purple-600 {
-  background: linear-gradient(to bottom right, #3b82f6, #9333ea);
+/* ============================================
+   MODAL/OVERLAY DARK
+   ============================================ */
+.dark .bg-black\/50 {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+}
+
+/* ============================================
+   CODE TAG DARK
+   ============================================ */
+.dark code {
+  background-color: var(--gray-100) !important;
+  color: var(--gray-800) !important;
+}
+
+/* ============================================
+   ANIMATE SPIN BORDER
+   ============================================ */
+.dark .border-b-2.border-blue-600 {
+  border-bottom-color: #60a5fa !important;
+}
+
+/* ============================================
+   LOGIN PAGE - Azul → Teal
+   ============================================ */
+.login-bg {
+  background: linear-gradient(135deg, #1e40af 0%, #0d9488 100%) !important;
+  background-color: #1e40af !important;
+}
+
+.login-icon {
+  background: linear-gradient(135deg, #2563eb 0%, #14b8a6 100%) !important;
+  background-color: #2563eb !important;
+}
+
+.login-btn {
+  background: linear-gradient(to right, #2563eb, #0d9488) !important;
+  background-color: #2563eb !important;
+}
+
+.dark .login-bg {
+  background: linear-gradient(135deg, #0f172a 0%, #134e4a 100%) !important;
+  background-color: #0f172a !important;
+}
+
+.dark .login-icon {
+  background: linear-gradient(135deg, #1d4ed8 0%, #0f766e 100%) !important;
+  background-color: #1d4ed8 !important;
+}
+
+.dark .login-btn {
+  background: linear-gradient(to right, #1d4ed8, #0f766e) !important;
+  background-color: #1d4ed8 !important;
 }

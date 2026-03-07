@@ -133,7 +133,7 @@ export default function ProvaPage() {
       const resultado = await res.json();
       // Redirecionar para resultado
       router.push(
-        `/aluno/prova/${provaId}/resultado?nota=${resultado.nota}&acertos=${resultado.acertos}&total=${resultado.total}`
+        `/aluno/prova/${provaId}/resultado?nota=${resultado.nota}&acertos=${resultado.acertos}&total=${resultado.total}&tentativaId=${tentativaIdRef.current}`
       );
     } catch {
       setFinalizando(false);

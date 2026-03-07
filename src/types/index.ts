@@ -25,6 +25,8 @@ export interface Question {
   professorId: string;
   createdAt: Date;
   imagemUrl?: string;
+  feedbackAcerto?: string;
+  feedbackErro?: string;
 }
 
 // Prova Types
@@ -68,6 +70,8 @@ export interface QuestionFormData {
   alternativaCorreta: number;
   materia: string;
   semestre: number;
+  feedbackAcerto?: string;
+  feedbackErro?: string;
 }
 
 export interface ProvaFormData {
