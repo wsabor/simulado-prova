@@ -27,6 +27,7 @@ export async function GET() {
       email: a.email,
       role: a.role,
       turma: a.turma || '',
+      ativo: a.ativo !== false,
       createdAt: a.createdAt,
     }))
   );

@@ -11,6 +11,7 @@ interface Aluno {
   name: string;
   email: string;
   turma: string;
+  ativo: boolean;
   createdAt: string;
 }
 
@@ -73,6 +74,23 @@ export default function AlunosPage() {
       setMessage({ type: 'error', text: 'Erro ao cadastrar aluno' });
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const toggleAtivo = async (alunoId: string, ativo: boolean) => {
+    try {
+      const res = await fetch(`/api/users/${alunoId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ativo }),
+      });
+      if (res.ok) {
+        setAlunos((prev) =>
+          prev.map((a) => (a.id === alunoId ? { ...a, ativo } : a))
+        );
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar status:', error);
     }
   };
 
@@ -239,14 +257,35 @@ export default function AlunosPage() {
                           </div>
                           <div className="divide-y divide-gray-200">
                             {alunosDaTurma.map((aluno) => (
-                              <div key={aluno.id} className="px-6 py-3 flex items-center justify-between">
-                                <div>
-                                  <p className="font-medium text-gray-900">{aluno.name}</p>
-                                  <p className="text-sm text-gray-500">{aluno.email}</p>
+                              <div key={aluno.id} className={`px-6 py-3 flex items-center justify-between ${!aluno.ativo ? 'opacity-50 bg-gray-50' : ''}`}>
+                                <div className="flex items-center gap-3">
+                                  <div>
+                                    <p className="font-medium text-gray-900">
+                                      {aluno.name}
+                                      {!aluno.ativo && (
+                                        <span className="ml-2 text-xs font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full">
+                                          Inativo
+                                        </span>
+                                      )}
+                                    </p>
+                                    <p className="text-sm text-gray-500">{aluno.email}</p>
+                                  </div>
                                 </div>
-                                <span className="text-xs text-gray-400">
-                                  {new Date(aluno.createdAt).toLocaleDateString('pt-BR')}
-                                </span>
+                                <div className="flex items-center gap-3">
+                                  <span className="text-xs text-gray-400">
+                                    {new Date(aluno.createdAt).toLocaleDateString('pt-BR')}
+                                  </span>
+                                  <button
+                                    onClick={() => toggleAtivo(aluno.id, !aluno.ativo)}
+                                    className={`text-xs font-medium px-3 py-1 rounded-full transition-colors ${
+                                      aluno.ativo
+                                        ? 'text-red-600 bg-red-50 hover:bg-red-100'
+                                        : 'text-green-600 bg-green-50 hover:bg-green-100'
+                                    }`}
+                                  >
+                                    {aluno.ativo ? 'Desativar' : 'Ativar'}
+                                  </button>
+                                </div>
                               </div>
                             ))}
                           </div>
