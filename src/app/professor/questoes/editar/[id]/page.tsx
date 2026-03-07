@@ -20,8 +20,10 @@ export default function EditarQuestaoPage() {
     alternativas: ['', '', '', '', ''],
     alternativaCorreta: 0,
     materia: '',
-    semestre: 1
+    semestre: 1,
+    tags: [],
   });
+  const [tagInput, setTagInput] = useState('');
 
   useEffect(() => {
     if (user && questionId) {
@@ -55,7 +57,10 @@ export default function EditarQuestaoPage() {
         alternativas: question.alternativas.map(alt => alt.texto),
         alternativaCorreta: alternativaCorreta !== -1 ? alternativaCorreta : 0,
         materia: question.materia,
-        semestre: question.semestre
+        semestre: question.semestre,
+        feedbackAcerto: question.feedbackAcerto,
+        feedbackErro: question.feedbackErro,
+        tags: question.tags || [],
       });
     } catch (error) {
       console.error('Error loading question:', error);
@@ -209,6 +214,93 @@ export default function EditarQuestaoPage() {
               <p className="text-sm text-gray-500 mt-2">
                 * Selecione o botão ao lado da alternativa correta
               </p>
+            </div>
+
+            {/* Tags */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Tags / Categorias (opcional)
+              </label>
+              <div className="flex gap-2 mb-2">
+                <input
+                  type="text"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ',') {
+                      e.preventDefault();
+                      const tag = tagInput.trim();
+                      if (tag && !(formData.tags || []).includes(tag)) {
+                        setFormData({ ...formData, tags: [...(formData.tags || []), tag] });
+                      }
+                      setTagInput('');
+                    }
+                  }}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Digite uma tag e pressione Enter"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const tag = tagInput.trim();
+                    if (tag && !(formData.tags || []).includes(tag)) {
+                      setFormData({ ...formData, tags: [...(formData.tags || []), tag] });
+                    }
+                    setTagInput('');
+                  }}
+                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                >
+                  Adicionar
+                </button>
+              </div>
+              {(formData.tags || []).length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {(formData.tags || []).map((tag, i) => (
+                    <span
+                      key={i}
+                      className="inline-flex items-center gap-1 px-3 py-1 bg-teal-100 text-teal-800 text-sm font-medium rounded-full"
+                    >
+                      {tag}
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, tags: (formData.tags || []).filter((_, idx) => idx !== i) })}
+                        className="w-4 h-4 flex items-center justify-center rounded-full hover:bg-teal-200 transition-colors"
+                      >
+                        &times;
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Feedback */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Feedback (opcional)
+              </label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-green-600 mb-1">Feedback de Acerto</label>
+                  <textarea
+                    value={formData.feedbackAcerto || ''}
+                    onChange={(e) => setFormData({ ...formData, feedbackAcerto: e.target.value })}
+                    rows={3}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none text-sm"
+                    placeholder="Exibido quando o aluno acertar a questão..."
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-red-600 mb-1">Feedback de Erro</label>
+                  <textarea
+                    value={formData.feedbackErro || ''}
+                    onChange={(e) => setFormData({ ...formData, feedbackErro: e.target.value })}
+                    rows={3}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent resize-none text-sm"
+                    placeholder="Exibido quando o aluno errar a questão..."
+                  />
+                </div>
+              </div>
             </div>
 
             {/* Actions */}

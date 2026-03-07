@@ -30,6 +30,7 @@ export async function GET(req: NextRequest) {
       imagemUrl: d.imagemUrl,
       feedbackAcerto: d.feedbackAcerto,
       feedbackErro: d.feedbackErro,
+      tags: d.tags || [],
     }))
   );
 }
@@ -41,7 +42,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
   }
 
-  const { enunciado, alternativas, alternativaCorreta, materia, semestre, feedbackAcerto, feedbackErro } =
+  const { enunciado, alternativas, alternativaCorreta, materia, semestre, feedbackAcerto, feedbackErro, tags } =
     await req.json();
 
   if (!enunciado || !alternativas || !materia || semestre == null) {
@@ -63,6 +64,7 @@ export async function POST(req: NextRequest) {
     professorId: session.user.id,
     feedbackAcerto: feedbackAcerto || undefined,
     feedbackErro: feedbackErro || undefined,
+    tags: Array.isArray(tags) ? tags.filter((t: string) => t.trim()) : [],
   });
 
   return NextResponse.json({ id: doc._id.toString() }, { status: 201 });

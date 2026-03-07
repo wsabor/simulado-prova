@@ -13,7 +13,9 @@ export default function QuestoesPage() {
   const [loading, setLoading] = useState(true);
   const [filtroMateria, setFiltroMateria] = useState('');
   const [filtroSemestre, setFiltroSemestre] = useState('');
+  const [filtroTag, setFiltroTag] = useState('');
   const [materias, setMaterias] = useState<string[]>([]);
+  const [todasTags, setTodasTags] = useState<string[]>([]);
 
   useEffect(() => {
     if (user) {
@@ -32,6 +34,10 @@ export default function QuestoesPage() {
       // Extrair matérias únicas
       const uniqueMaterias = Array.from(new Set(data.map(q => q.materia)));
       setMaterias(uniqueMaterias);
+
+      // Extrair tags únicas
+      const uniqueTags = Array.from(new Set(data.flatMap(q => q.tags || [])));
+      setTodasTags(uniqueTags);
     } catch (error) {
       console.error('Error loading questions:', error);
       alert('Erro ao carregar questões');
@@ -59,13 +65,14 @@ export default function QuestoesPage() {
   const filteredQuestions = questions.filter(q => {
     if (filtroMateria && q.materia !== filtroMateria) return false;
     if (filtroSemestre && q.semestre.toString() !== filtroSemestre) return false;
+    if (filtroTag && !(q.tags || []).includes(filtroTag)) return false;
     return true;
   });
 
   return (
     <ProfessorLayout
       titulo="Gerenciar Questões"
-      subtitulo={`${filteredQuestions.length} questões ${filtroMateria || filtroSemestre ? 'encontradas' : 'criadas'}`}
+      subtitulo={`${filteredQuestions.length} questões ${filtroMateria || filtroSemestre || filtroTag ? 'encontradas' : 'criadas'}`}
     >
       {/* Action Buttons */}
       <div className="flex gap-3 mb-6">
@@ -91,7 +98,7 @@ export default function QuestoesPage() {
 
       {/* Filters */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Filtrar por Matéria
@@ -124,11 +131,28 @@ export default function QuestoesPage() {
             </select>
           </div>
 
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Filtrar por Tag
+            </label>
+            <select
+              value={filtroTag}
+              onChange={(e) => setFiltroTag(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="">Todas as tags</option>
+              {todasTags.map(tag => (
+                <option key={tag} value={tag}>{tag}</option>
+              ))}
+            </select>
+          </div>
+
           <div className="flex items-end">
             <button
               onClick={() => {
                 setFiltroMateria('');
                 setFiltroSemestre('');
+                setFiltroTag('');
               }}
               className="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
             >
@@ -151,7 +175,7 @@ export default function QuestoesPage() {
           </svg>
           <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhuma questão encontrada</h3>
           <p className="text-gray-500 mb-6">
-            {filtroMateria || filtroSemestre
+            {filtroMateria || filtroSemestre || filtroTag
               ? 'Tente ajustar os filtros ou criar uma nova questão'
               : 'Comece criando sua primeira questão'
             }
@@ -169,13 +193,18 @@ export default function QuestoesPage() {
             <div key={question.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
+                  <div className="flex items-center gap-2 mb-2 flex-wrap">
                     <span className="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
                       {question.materia}
                     </span>
                     <span className="px-3 py-1 bg-purple-100 text-purple-800 text-sm font-medium rounded-full">
                       {question.semestre}º Semestre
                     </span>
+                    {(question.tags || []).map((tag, tagIdx) => (
+                      <span key={tagIdx} className="px-3 py-1 bg-teal-100 text-teal-800 text-xs font-medium rounded-full">
+                        {tag}
+                      </span>
+                    ))}
                   </div>
                   <h3 className="text-lg font-medium text-gray-900 mb-3">
                     Questão #{index + 1}

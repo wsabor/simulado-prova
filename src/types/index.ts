@@ -27,6 +27,7 @@ export interface Question {
   imagemUrl?: string;
   feedbackAcerto?: string;
   feedbackErro?: string;
+  tags?: string[];
 }
 
 // Prova Types
@@ -72,6 +73,7 @@ export interface QuestionFormData {
   semestre: number;
   feedbackAcerto?: string;
   feedbackErro?: string;
+  tags?: string[];
 }
 
 export interface ProvaFormData {

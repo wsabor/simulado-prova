@@ -14,6 +14,7 @@ export interface IQuestion extends Document {
   imagemUrl?: string;
   feedbackAcerto?: string;
   feedbackErro?: string;
+  tags?: string[];
   createdAt: Date;
 }
 
@@ -35,6 +36,7 @@ const QuestionSchema = new Schema<IQuestion>(
     imagemUrl: { type: String },
     feedbackAcerto: { type: String },
     feedbackErro: { type: String },
+    tags: { type: [String], default: [] },
   },
   { timestamps: true }
 );

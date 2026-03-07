@@ -34,6 +34,9 @@ export async function GET(
     professorId: doc.professorId,
     createdAt: doc.createdAt,
     imagemUrl: doc.imagemUrl,
+    feedbackAcerto: doc.feedbackAcerto,
+    feedbackErro: doc.feedbackErro,
+    tags: doc.tags || [],
   });
 }
 
@@ -48,7 +51,7 @@ export async function PUT(
   }
 
   const { id } = await params;
-  const { enunciado, alternativas, alternativaCorreta, materia, semestre } =
+  const { enunciado, alternativas, alternativaCorreta, materia, semestre, feedbackAcerto, feedbackErro, tags } =
     await req.json();
 
   await connectDB();
@@ -63,6 +66,9 @@ export async function PUT(
     alternativas: alts,
     materia,
     semestre,
+    feedbackAcerto: feedbackAcerto || undefined,
+    feedbackErro: feedbackErro || undefined,
+    tags: Array.isArray(tags) ? tags.filter((t: string) => t.trim()) : [],
   });
 
   return NextResponse.json({ success: true });

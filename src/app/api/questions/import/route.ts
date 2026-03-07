@@ -63,6 +63,7 @@ export async function POST(req: NextRequest) {
       imagemUrl: q.imagemUrl || undefined,
       feedbackAcerto: q.feedbackAcerto || undefined,
       feedbackErro: q.feedbackErro || undefined,
+      tags: Array.isArray(q.tags) ? q.tags.filter((t: string) => t.trim()) : [],
     });
   }
 

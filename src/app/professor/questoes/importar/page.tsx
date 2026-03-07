@@ -18,7 +18,8 @@ const EXEMPLO_JSON = `[
     "materia": "Desenvolvimento Web",
     "semestre": 1,
     "feedbackAcerto": "Correto! CSS (Cascading Style Sheets) é a linguagem usada para estilizar páginas web.",
-    "feedbackErro": "Incorreto. A resposta correta é CSS (Cascading Style Sheets)."
+    "feedbackErro": "Incorreto. A resposta correta é CSS (Cascading Style Sheets).",
+    "tags": ["CSS", "Estilização"]
   },
   {
     "enunciado": "O que significa HTML?",
@@ -32,7 +33,8 @@ const EXEMPLO_JSON = `[
     "alternativaCorreta": 0,
     "materia": "Desenvolvimento Web",
     "semestre": 1,
-    "imagemUrl": "https://exemplo.com/imagem.png"
+    "imagemUrl": "https://exemplo.com/imagem.png",
+    "tags": ["HTML", "Básico"]
   }
 ]`;
 
@@ -225,6 +227,10 @@ export default function ImportarQuestoesPage() {
                     <div className="bg-gray-50 rounded-lg p-3">
                       <p className="font-mono text-xs font-bold text-green-600">feedbackErro</p>
                       <p className="text-xs text-gray-500 mt-1">Texto exibido ao errar (opcional)</p>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg p-3">
+                      <p className="font-mono text-xs font-bold text-green-600">tags</p>
+                      <p className="text-xs text-gray-500 mt-1">Array de strings com categorias (opcional)</p>
                     </div>
                   </div>
 
